@@ -1,46 +1,37 @@
-version: "3.8"
-
 services:
   db:
-    image: mysql:8.0
+    image: mariadb:10.11
     container_name: prestashop_db_23U2729
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: root123456
+      MARIADB_DATABASE: prestashop
+      MARIADB_USER: prestashop
+      MARIADB_PASSWORD: prestashop123
     volumes:
       - ./prestashop_app/mysql:/var/lib/mysql
     networks:
       - prestashop_network
-    command: --default-authentication-plugin=mysql_native_password
 
   prestashop:
-    image: prestashop/prestashop:latest
+    image: prestashop/prestashop:8.1
     container_name: prestashop_app_23U2729
     restart: unless-stopped
-    depends_on:
-      - db
     environment:
-      - DB_SERVER=db
-      - DB_NAME=${MYSQL_DATABASE}
-      - DB_USER=${MYSQL_USER}
-      - DB_PASSWD=${MYSQL_PASSWORD}
-      - PS_DOMAIN=${PS_DOMAIN}
-      - PS_FOLDER_ADMIN=${PS_FOLDER_ADMIN}
-      - PS_FOLDER_INSTALL=${PS_FOLDER_INSTALL}
-      - PS_LANGUAGE=${PS_LANGUAGE}
-      - PS_COUNTRY=${PS_COUNTRY}
-      - PS_INSTALL_AUTO=${PS_INSTALL_AUTO}
-      - ADMIN_MAIL=${ADMIN_MAIL}
-      - ADMIN_PASSWD=${ADMIN_PASSWORD}
+      DB_SERVER: db
+      DB_NAME: prestashop
+      DB_USER: prestashop
+      DB_PASSWD: prestashop123
+      PS_INSTALL_AUTO: 0
+      PS_DOMAIN: 23U2729.systeme-res30.app
     volumes:
       - ./prestashop_app/prestashop:/var/www/html
     ports:
       - "5780:80"
     networks:
       - prestashop_network
+    depends_on:
+      - db
 
 networks:
   prestashop_network:
