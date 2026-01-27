@@ -1,8 +1,0 @@
-# Ignorer les données de la base de données
-23U2729/prestashop_app/mysql/
-
-# Ignorer les fichiers lourds de Prestashop (images, cache)
-23U2729/prestashop_app/prestashop/
-
-# Ignorer les logs
-*.log
