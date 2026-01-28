@@ -16,12 +16,35 @@ garantir isolation et performance.
 3. International : Gestion multi-devices et multi-langues.
 
 ## Architecture Techinque 
-L'architecture repose sur un modèle a trois couches :
-1. Reverse Proxy Nginx: Gère le HTTPS (port 443) et redirige vers le port 5780.
-2. Prestashop 8.1 : Serveur applicatif Apache/PHP.
-3. MariaDB 10.11 :  Base de données relationnelle persistante.
+- **Service `db` (MariaDB 10.11) :** Gère le stockage persistant des données (produits, clients, commandes).
+- **Service `prestashop` (v8.1) :** Contient le code source PHP et l'interface de gestion de la boutique.
+- **Réseau `23U2729_prestashop_network` :** Isole les conteneurs pour une communication sécurisée.
 
-## Instruction de démarrage
+
+## Explication des Variables d'Environnement
+- `MARIADB_ROOT_PASSWORD` : Mot de passe administrateur de la base de données.
+- `DB_SERVER` : Indique à PrestaShop le nom du conteneur de base de données à contacter.
+- `PS_DOMAIN` : Définit le nom de domaine officiel de la boutique pour générer les liens.
+- `PS_INSTALL_AUTO` : Définit si l'installation doit se lancer automatiquement au démarrage.
+
+
+## Sécurité et Certificat TLS (Let's Encrypt / Certbot)
+- **Rôle de Let's Encrypt :** Autorité de certification gratuite et ouverte fournissant des certificats SSL/TLS.
+- **Rôle de Certbot :** Client logiciel utilisé pour automatiser la demande, la validation et l'installation du certificat.
+- **Génération du certificat :**
+  ```bash
+  sudo systemctl stop nginx
+  sudo certbot certonly --standalone -d 23u2729.systeme-res30.app
+  sudo systemctl start nginx
+```
+
+
+- Répertoire des certificats : Les fichiers (fullchain.pem et privkey.pem) se trouvent dans :
+/etc/letsencrypt/live/23u2729.systeme-res30.app/
+
+## Fichier de Configuration Nginx (Reverse Proxy)
+Le fichier se trouve dans /etc/nginx/sites-enabled/23U2729.conf. Il écoute sur le port 443, gère le chiffrement SSL et redirige le trafic vers le port 5780 du serveur hôte.
+# Instruction de démarrage
  
 ```bash
 cd ~/deployments/23U2729

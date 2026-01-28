@@ -11,7 +11,7 @@ services:
     volumes:
       - ./prestashop_app/mysql:/var/lib/mysql
     networks:
-      - prestashop_network
+      - 23U2729_prestashop_network
 
   prestashop:
     image: prestashop/prestashop:8.1
@@ -23,16 +23,16 @@ services:
       DB_USER: prestashop
       DB_PASSWD: prestashop123
       PS_INSTALL_AUTO: 0
-      PS_DOMAIN: 23U2729.systeme-res30.app
+      PS_DOMAIN: 23u2729.systeme-res30.app
     volumes:
       - ./prestashop_app/prestashop:/var/www/html
     ports:
       - "5780:80"
     networks:
-      - prestashop_network
+      - 23U2729_prestashop_network
     depends_on:
       - db
 
 networks:
-  prestashop_network:
+  23U2729_prestashop_network:
     driver: bridge
